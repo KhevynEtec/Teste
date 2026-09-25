@@ -1,1 +1,274 @@
+## Metadados
 
+**Nomes dos alunos e RGM**
+
+- **Alexandre Almeida de Jesus Nogueira RGM: 47336480**
+- **Khevyn Lopes dos Santos RGM: 46985859**
+- **Luis Plinio Cornelio Mota  RGM: 47174081**
+- **Marcos Paulo Cornelio Mota  RGM: 46917462**
+- **Yuri Navas Moreira RGM: 47106131**
+
+# Entrega 1 — Modelo Conceitual (DER)
+### Modelagem de um sistema de gestão de informações para a Letty Gestão Comercial LTDA
+
+---
+
+## 1. Caracterização da Organização
+
+- **Nome e natureza da organização:** Letty Gestão Comercial LTDA, empresa privada com fins lucrativos atuante no segmento de representação e gestão comercial no varejo alimentício.
+- **Contexto e porte:** Operação enxuta composta por 2 pessoas (sendo o representante comercial Ednilson o responsável direto pelas operações de campo e negociações). A empresa atua há 1 ano e 6 meses representando fabricantes da indústria alimentícia e gerenciando a carteira de pedidos junto a redes de supermercados no varejo.
+- **Problemas e necessidades identificados:** A gestão comercial atual é fragmentada entre planilhas, anotações pessoais e portais isolados de clientes. Os principais gargalos operacionais são:
+  * Falta de acompanhamento em tempo real da atuação dos promotores terceirizados na reposição de gôndolas.
+  * Dificuldade de controle do estoque e risco de perda de produtos por vencimento nas lojas (gerando prejuízo direto).
+  * Retrabalho e gargalos no fluxo de cadastro e emissão de pedidos de venda por divergências de preços ou dados fiscais.
+  * Ausência de uma plataforma unificada que integre os dados do fabricante e do varejo para suporte a decisões estratégicas e ações promocionais preventivas.
+- **Justificativa da escolha:** A Letty possui uma operação de alta relevância logística e comercial, sendo um estudo de caso ideal para modelagem de banco de dados. Apresenta complexidade adequada de entidades e relacionamentos (gestão de lotes, pedidos, auditoria em loja e conformidade fiscal/LGPD) em uma estrutura de pequeno porte acessível para levantamento de requisitos.
+- **Evidências da organização:** 
+  * **Razão Social:** Letty Gestão Comercial LTDA.
+  * **Tempo de Atuação:** 1 ano e 6 meses.
+  * **Responsável Operacional:** Ednilson (Representante Comercial).
+  * **Forma de Contato:** Telefone: +55 11 99272-0925 (Mande mensagem no WhatsApp antes de ligar) / E-mail: ednilson2306@gmail.com
+  * **CNPJ:** 62.549.640/0001-02
+  * **Entrevista:** Entrevista técnica e levantamento de requisitos com o gestor comercial em setembro de 2026.
+  * **Fotos:**
+   <img width="252" height="300" alt="image" src="https://github.com/user-attachments/assets/5c7eaf1b-62cb-41ca-a974-c7f16393893d" />
+
+---
+
+## 2. Processos de Negócio
+
+- **Principais processos mapeados:**
+  1. **Captação e Cadastro:** Registro cadastral de Fabricantes, Redes de Supermercados (Matriz e Filiais/Lojas) e do portfólio de Produtos com especificações fiscais.
+  2. **Análise de Mercado e PDV:** Leitura de concorrência, precificação em gôndola e levantamento de performance por loja.
+  3. **Negociação e Registro de Pedidos:** Reunião periódica com o comprador da rede, fechamento e lançamento de pedidos com múltiplos itens, quantidade e preço negociado.
+  4. **Faturamento, Lote e Logística:** Processamento do pedido pela fábrica, emissão do Lote de produção com datas de fabricação/validade e entrega na loja recebedora.
+  5. **Auditoria e Promotoria (Visita PDV):** Reposição de mercadorias por promotor terceirizado, acompanhamento de estoque de gôndola e conferência de validades.
+  6. **Gestão de Validade:** Identificação de itens com baixo giro/proximidade do vencimento para evitar perdas.
+
+*(Os fluxogramas dos processos chave serão disponibilizados em imagem/arquivo anexo no repositório)*
+
+<img width="1700" height="1600" alt="image" src="https://github.com/KhevynEtec/Entrega_Modelagem_banco_de_dados_letty/blob/main/_Fluxograma.png" />
+
+[![Fluxograma]](./_Fluxograma.png)
+
+---
+
+## 3. Requisitos do Sistema
+
+### 3.1 Requisitos Funcionais
+* **RF01 - Gestão Cadastral:** O sistema deve permitir o cadastro de Fabricantes, Produtos, Redes de Supermercados, Lojas/Filiais, Contatos por setor e Promotores terceirizados.
+* **RF02 - Registro de Lotes:** O sistema deve permitir o vínculo de Lotes a Produtos, armazenando data de fabricação, data de validade e quantidade produzida.
+* **RF03 - Emissão de Pedidos:** O sistema deve permitir criar pedidos de venda vinculados a uma Rede e Loja, contendo um ou mais produtos com suas respectivas quantidades e preços negociados.
+* **RF04 - Gestão de Status de Pedido:** O sistema deve registrar o ciclo de vida do pedido nos status: Negociação, Registrado, Aprovado, Faturado, Em Transporte, Entregue, Entregue Parcialmente, Recusado/Cortado e Cancelado.
+* **RF05 - Auditoria de Visita e Gôndola:** O sistema deve registrar as visitas presenciais dos promotores nas lojas, capturando horário de início/fim, contagem de estoque e menor data de validade encontrada em gôndola.
+* **RF06 - Alertas de Validade e Ruptura:** O sistema deve emitir relatórios/alertas prévios sobre lotes com vencimento próximo e produtos com estoque crítico/baixo giro.
+
+### 3.2 Requisitos Não Funcionais
+* **RNF01 - Integridade e Mecanismo de Armazenamento:** O sistema deve utilizar SGBD MySQL 8 com mecanismo InnoDB para garantir transações ACID e integridade referencial.
+* **RNF02 - Codificação de Caracteres:** Uso exclusivo do charset `utf8mb4` com collation `utf8mb4_0900_ai_ci` para suporte a acentuação e símbolos.
+* **RNF03 - Segurança e Proteção de Dados (LGPD):** O acesso a dados pessoais (CPF, e-mail, telefone de promotores e contatos) deve ser restrito ao Usuário Principal e totalmente auditado via log de acesso do SGBD (`audit_log` ou `mysql.general_log`), em conformidade com a Lei nº 13.709/2018 (art. 5º, I e art. 7º, V).
+* **RNF04 - Restrição de Acesso Operacional:** Somente o Usuário Principal possui permissões globais de inserção, alteração e exclusão de cadastros. Registros de transações (pedidos e visitas) devem ser imutáveis para garantir histórico fiscal e auditoria.
+
+---
+
+## 4. Regras de Negócio
+
+- **Regras Operacionais:**
+  * **RN01 (Dependência Cadastral):** Não é permitido emitir pedidos para clientes ou produtos não cadastrados previamente.
+  * **RN02 (Unicidade de Documentos):** O CNPJ é único e obrigatório para cada Fabricante, Rede e Loja física (filiais possuem CNPJ próprio). O CPF é único e obrigatório para Promotores.
+  * **RN03 (Itens de Pedido):** Todo pedido de venda deve conter obrigatoriamente no mínimo um item.
+  * **RN04 (Restrição do Preço Praticado):** O preço unitário negociado em pedido não pode ser inferior ao preço mínimo de tabela aprovado para o produto.
+  * **RN05 (Bloqueio de Vencidos):** Produtos com lote vencido não podem ser comercializados, faturados ou repostos em gôndola.
+  * **RN06 (Regras de Recebimento):** Cada Loja/Filial possui regras específicas de entrega e recebimento (janelas de horário, prazos e documentação) que devem ser registradas no pedido.
+
+- **Restrições Organizacionais:**
+  * **RO01 (Fluxo Administrativo Engessado do Varejo):** A integração com redes de supermercado exige estrita observância do fluxo sequencial: Comercial → Cadastro → Fiscal → Pricing → Produtos → Logística.
+  * **RO02 (Imutabilidade do Histórico Fiscal/Comercial):** Por exigência legal e fiscal, registros de pedidos e histórico de auditoria de visitas não podem ser deletados do sistema.
+
+---
+
+## 5. Dicionário de Dados Conceitual (Preliminar)
+
+*(O Dicionário de Dados Conceitual será fornecido em documento/tabela externa)*
+[![Dicionário de Dados]](./Dicionário_de_Dados_letty_quinta_Vs_06.html)
+
+
+## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
+
+- **Entidades e Atributos Reconhecidos:**
+
+  * **FABRICANTE:** Entidade detentora dos produtos alimentícios e contratante da representação.
+  * **PRODUTO:** Itens do catálogo comercial com dados fiscais, físicos e preço base.
+  * **LOTE:** Rastreabilidade de produção, controle de validade e datas.
+  * **SUPER_MERCADO:** Entidade matriz compradora no varejo.
+  * **LOJA:** Filial física compradora e ponto de entrega/reposição de produtos.
+  * **CONTATO:** Pessoas físicas interlocutoras de cada setor (Fiscal, Pricing, Compras, Logística).
+  * **PROMOTOR:** Agente terceirizado responsável pelo abastecimento em gôndola.
+  * **PEDIDO:** Transação comercial consolidada entre fabricante, rede e loja.
+  * **VISITA:** Atendimento presencial para conferência de estoque de gôndola e validades.
+
+### **1. FABRICANTE**
+
+Entidade detentora dos produtos alimentícios e contratante da representação.
+
+* **ID_FABRICANTE** (Chave Primária): Identificador único do fabricante no sistema.
+* **NM_RAZAO_SOCIAL**: Razão social completa da empresa fabricante.
+* **NM_FANTASIA**: Nome de exibição ou marca do fabricante no mercado.
+* **CD_CNPJ**: Cadastro Nacional da Pessoa Jurídica (Chave única e obrigatória).
+* **CD_INSCRICAO_ESTADUAL**: Inscrição estadual para validação de emissão fiscal.
+* **DS_ENDERECO**: Endereço completo da sede do fabricante.
+* **CD_TELEFONE**: Telefone corporativo principal da fábrica.
+* **DS_EMAIL**: E-mail oficial do departamento comercial/administrativo.
+* **DT_INICIO_REPRESENTACAO**: Data do início do contrato de representação.
+
+---
+
+### **2. PRODUTO**
+
+* **ID_PRODUTO** (Chave Primária): Identificador único do produto no sistema.
+* **CD_EAN**: Código de barras global do produto (Chave única).
+* **CD_NCM**: Nomenclatura Comum do Mercosul para fins de tributação fiscal.
+* **DS_PRODUTO**: Descrição comercial detalhada do item.
+* **NM_MARCA**: Nome comercial da marca do produto.
+* **TP_EMBALAGEM**: Tipo do acondicionamento (ex.: Caixa, Pacote, Fardo, Garrafa).
+* **QT_PESO_BRUTO**: Peso bruto total incluindo embalagem (em kg).
+* **QT_PESO_LIQUIDO**: Peso líquido real do conteúdo (em kg).
+* **TP_UNIDADE_MEDIDA**: Unidade de medida para comercialização (ex.: KG, UN, CX).
+* **VL_PRECO_TABELA**: Valor base de tabela do produto antes das negociações.
+* **TP_REGIME_TRIBUTARIO**: Classificação fiscal/tributária do produto.
+* **IN_ATIVO**: Indicador booleano que define se o produto está ativo para venda e reposição.
+
+---
+
+### **3. LOTE**
+
+* **ID_LOTE** (Chave Primária): Identificador do lote no banco de dados.
+* **CD_NUMERO_LOTE**: Código de controle de lote atribuído pela fábrica.
+* **QT_PRODUZIDA**: Quantidade total de unidades fabricadas na remessa.
+* **DT_FABRICACAO**: Data de industrialização da mercadoria.
+* **DT_VALIDADE**: Data limite de validade para controle e emissão de alertas de vencimento.
+
+---
+
+### **4. SUPER_MERCADO**
+
+* **ID_REDE** (Chave Primária): Identificador único da rede/matriz de supermercados.
+* **NM_RAZAO_SOCIAL**: Razão social oficial da rede.
+* **NM_FANTASIA**: Nome fantasia/marca da rede varejista.
+* **CD_CNPJ**: CNPJ da matriz do grupo comprador (Chave única).
+* **CD_INSCRICAO_ESTADUAL**: Inscrição estadual para faturamento.
+* **DS_ENDERECO**: Endereço da matriz administrativa.
+* **CD_TELEFONE**: Telefone de contato institucional e central de compras.
+* **NM_REPRESENTANTE_GERAL**: Nome do gestor/comprador principal da rede.
+* **DS_PORTAL_URL** *(Opcional)*: Endereço do portal eletrônico de pedidos da rede.
+* **DT_INICIO_RELACIONAMENTO**: Data do primeiro cadastro/atendimento da rede.
+
+---
+
+### **5. LOJA**
+
+* **ID_LOJA** (Chave Primária): Identificador interno da filial/loja.
+* **CD_CODIGO_LOJA_REDE**: Código de identificação interno da loja no sistema da própria rede.
+* **NM_LOJA**: Nome de identificação da filial (ex.: "Loja 02 - Centro").
+* **CD_CNPJ**: CNPJ próprio da filial física (Chave única).
+* **DS_ENDERECO**: Endereço físico completo da loja para entregas.
+* **CD_TELEFONE**: Contato telefônico direto do setor de recebimento da loja.
+* **IN_ATIVA**: Indicador se a filial está ativa e operante.
+
+---
+
+### **6. CONTATO**
+
+* **ID_CONTATO** (Chave Primária): Identificador único do registro de contato.
+* **NM_CONTATO**: Nome completo do interlocutor.
+* **DS_SETOR**: Setor do profissional (ex.: Fiscal, Logística, Pricing, Compras).
+* **DS_CARGO**: Cargo ou função desempenhada na empresa cliente.
+* **CD_TELEFONE**: Telefone ou ramal direto do contato.
+* **DS_EMAIL**: E-mail para envio de documentos, cotações e pedidos.
+
+---
+
+### **7. PROMOTOR**
+
+* **ID_PROMOTOR** (Chave Primária): Identificador único do promotor.
+* **NM_PROMOTOR**: Nome completo do repositor/promotor terceirizado.
+* **CD_CPF**: CPF do profissional (Chave única).
+* **CD_TELEFONE**: Telefone celular/WhatsApp para comunicação e alertas.
+* **NM_EMPRESA_TERCEIRIZADA**: Razão social/nome da agência terceirizada prestadora do serviço.
+
+---
+
+### **8. PEDIDO**
+
+* **ID_PEDIDO** (Chave Primária): Identificador do pedido de venda.
+* **DT_PEDIDO**: Data de emissão e negociação do pedido.
+* **DT_PREVISTA_ENTREGA** *(Opcional)*: Data negociada para descarregamento na loja.
+* **VL_PRECO_TOTAL**: Valor monetário total consolidado dos itens do pedido.
+* **DS_CONDICAO_PAGAMENTO**: Regra e prazo financeiro de pagamento (ex.: 30/60 dias).
+* **TP_STATUS_ATUAL**: Estado atual do pedido (ex.: Registrado, Aprovado, Faturado, Entregue, Cancelado).
+
+---
+
+### **9. VISITA**
+
+* **ID_VISITA** (Chave Primária): Código identificador da auditoria/visita presencial.
+* **DT_VISITA**: Data do atendimento em loja.
+* **HR_INICIO**: Horário de início do atendimento.
+* **HR_FIM**: Horário de término do atendimento no PDV.
+* **QT_ESTOQUE_GONDOLA**: Quantidade apurada no ponto de venda/estoque.
+* **DT_VALIDADE_ENCONTRADA**: Menor data de validade mapeada em gôndola.
+* **DS_OBSERVACAO** *(Opcional)*: Relato sobre concorrência, avarias, quebras ou ações.
+
+---
+
+- **Relacionamentos e Cardinalidades:**
+
+* **FABRICANTE para PROMOTOR (envia):** (1,n) - (1,n) — Um fabricante envia um ou vários promotores, e um promotor é enviado por um ou vários fabricantes.
+* **FABRICANTE para PRODUTO (fabrica):** (1,n) - (1,n) — Um fabricante fabrica um ou vários produtos, e um produto é fabricado por um ou vários fabricantes.
+* **SUPER_MERCADO para LOJA (possui):** (1,n) - (1,n) — Uma rede de supermercado possui uma ou várias lojas, e uma loja pertence a uma ou várias redes.
+* **SUPER_MERCADO para CONTATO (tem):** (1,n) - (1,n) — Uma rede tem um ou vários contatos, e um contato pertence a uma ou várias redes.
+* **SUPER_MERCADO para PEDIDO (registra):** (1,n) - (1,n) — Uma rede registra um ou vários pedidos, e um pedido é registrado por uma ou várias redes.
+* **LOJA para CONTATO (possui):** (1,n) - (1,n) — Uma loja possui um ou vários contatos, e um contato está vinculado a uma ou várias lojas.
+* **LOJA para PEDIDO (destina-se a):** (1,n) - (1,n) — Um pedido destina-se a uma ou várias lojas, e uma loja recebe um ou vários pedidos.
+* **LOJA para VISITA (recebe):** (1,n) - (1,n) — Uma loja recebe uma ou várias visitas, e uma visita é realizada em uma ou várias lojas.
+* **PRODUTO para LOTE (possui):** (1,n) - (1,n) — Um produto possui um ou vários lotes, e um lote pertence a um ou vários produtos.
+* **PRODUTO para PEDIDO (contém):** (1,n) - (1,n) — Um produto compõe um ou vários pedidos, e um pedido contém um ou vários produtos.
+* **PRODUTO para VISITA (verifica):** (1,n) - (1,n) — Um produto é verificado em uma ou várias visitas, e uma visita verifica um ou vários produtos.
+* **PROMOTOR para VISITA (realiza):** (1,n) - (1,n) — Um promotor realiza uma ou várias visitas, e uma visita é realizada por um ou vários promotores.
+  
+---
+
+## 7. Diagrama Entidade-Relacionamento (DER)
+
+*(O Diagrama Entidade-Relacionamento [DER] encontra-se anexado separadamente como arquivo de imagem no repositório)*
+
+<img width="1400" height="1600" alt="image" src="https://github.com/KhevynEtec/Entrega_Modelagem_banco_de_dados_letty/blob/main/DER_Conceitual_Ednilson_quinta_final_08.png" />
+
+[![Diagrama Entidade-Relacionamento]](./DER_Conceitual_Ednilson_quinta_final_08.png)
+
+---
+
+## 8. Justificativa Técnica
+
+A modelagem do sistema da Letty Gestão Comercial foi concebida para sanar diretamente os gargalos de visibilidade do estoque e rastreabilidade identificados no levantamento de requisitos:
+
+1. **Separação entre Matriz (`SUPER_MERCADO`) e Filial (`LOJA`):** A escolha de desacoplar a rede matriz das lojas físicas é fundamental para a realidade do varejo alimentício. A negociação e os contatos de setores (Fiscal, Compras) ocorrem no âmbito da matriz, enquanto o faturamento, a entrega logística, a apuração de estoque e a atuação dos promotores ocorrem exclusivamente na filial física.
+2. **Modelagem do `LOTE` desvinculada do `PEDIDO` direto:** Os lotes de produção pertencem à entidade `PRODUTO`. Essa abstração permite que o estoque de determinado lote seja rastreado em gôndola durante as auditorias da `VISITA` sem forçar o cliente/comprador a escolher lotes na fase de negociação do `PEDIDO`.
+3. **Relacionamento Direto entre `PRODUTO` e `PEDIDO`:** No modelo conceitual, mantemos a associação N:N direta entre `PRODUTO` e `PEDIDO` para representar a inclusão de itens e seus valores negociados, deixando a resolução em entidade associativa para a etapa de modelagem lógica.
+
+---
+
+## 9. Uso de Inteligência Artificial
+
+O grupo utilizou Inteligência Artificial (Gemini 2.5) como ferramenta de apoio em etapas específicas do projeto. É fundamental destacar que **todos os dados, perguntas e artefatos gerados pela IA foram revisados, validados e alterados manualmente pelo grupo** para garantir a total fidelidade à realidade operacional da Letty Gestão Comercial.
+
+| Item | O que registrar |
+|------|------------------|
+| **Ferramenta e etapa** | **Gemini 2.5**, aplicado nas seguintes etapas:<br>1. **Criação das Perguntas para a Entrevista:** Formulação do roteiro de levantamento de requisitos com o gestor comercial.<br>2. **Criação do README:** Estruturação e redação da documentação técnica conforme o modelo do projeto.<br>3. **Criação do Dicionário de Dados:** Elaboração preliminar e mapeamento de tipos de dados/atributos. |
+| **Motivação** | Agilizar a estruturação do roteiro de pesquisa de campo, padronizar a documentação técnica no formato Markdown e mapear as tabelas e tipos de dados com base na especificação do sistema. |
+| **Prompt(s) utilizados** | - *Entrevista:* "Gere um roteiro de perguntas para entrevista de levantamento de requisitos com um representante comercial de produtos alimentícios do varejo."<br>- *Dicionário:* "Elabore um dicionário de dados conceitual/físico para o sistema de gestão comercial com base nas entidades mapeadas."<br>- *README:* "Com base nos dados fornecidos quero que realize a substituição dos dados deste read me com base nas regras propostas dentro dele." |
+| **Resposta recebida** | Roteiro estruturado de 20 perguntas, dicionário de dados em tabela e texto do README.md preenchido. |
+| **Fontes consultadas e verificadas** | Comparação direta com os dados coletados na entrevista presencial com o gestor Ednilson (`Perguntas Gestão Comercial - Ednilson (1).pdf`), validação da notação formal e checagem com o arquivo `Dicionário_de_Dados_letty_quinta_Vs_06.html`. |
+| **Trechos rejeitados ou corrigidos** | - Perguntas genéricas que não refletiam a realidade do varejo alimentício foram removidas ou reescritas.<br>- Atributos e tipos físicos sugeridos pela IA foram ajustados manualmente para atender aos padrões estipulados (ex: MySQL 8, InnoDB, UTF8MB4 e precisões de `decimal` e `varchar`).<br>- Regras de negócio genéricas foram substituídas pelas regras reais da empresa (ex: conformidade com LGPD e regras de fluxo de recebimento das lojas). |
+| **Justificativa da escolha final** | O uso da IA forneceu uma base inicial sólida, mas a validação e refinamento manual foram indispensáveis para alinhar o modelo conceitual e lógico exatamente às necessidades e restrições reais da organização. |
+| **Reflexão crítica** | A IA tende a sugerir estruturas genéricas de e-commerce ou ERP tradicional. A intervenção e correção humana foram essenciais para garantir que peculiaridades do segmento (como a diferenciação entre rede e loja física, e a auditoria de gôndola por promotor) fossem modeladas corretamente. |
