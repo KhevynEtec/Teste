@@ -225,6 +225,7 @@ Entidade detentora dos produtos alimentícios e contratante da representação.
 
 * **FABRICANTE para PROMOTOR (envia):** (1,n) - (1,n) — Um fabricante envia um ou vários promotores, e um promotor é enviado por um ou vários fabricantes.
 * **FABRICANTE para PRODUTO (fabrica):** (1,n) - (1,n) — Um fabricante fabrica um ou vários produtos, e um produto é fabricado por um ou vários fabricantes.
+* **FABRICANTE para PEDIDO (fecha):** (1,n) - (1,n) — Um fabricante fecha um ou vários pedidos, e um pedido é fechado por um ou vários fabricantes
 * **SUPER_MERCADO para LOJA (possui):** (1,n) - (1,n) — Uma rede de supermercado possui uma ou várias lojas, e uma loja pertence a uma ou várias redes.
 * **SUPER_MERCADO para CONTATO (tem):** (1,n) - (1,n) — Uma rede tem um ou vários contatos, e um contato pertence a uma ou várias redes.
 * **SUPER_MERCADO para PEDIDO (registra):** (1,n) - (1,n) — Uma rede registra um ou vários pedidos, e um pedido é registrado por uma ou várias redes.
